@@ -24,7 +24,13 @@ Los objetivos son:
 
 ## 2. Topología de red
 
-La **captura auténtica de GNS3** ya fue suministrada durante la práctica; está pendiente de cargarse como `Topologia/Topologia.png`. No se incrusta todavía para evitar enlaces de imagen rotos.
+**Captura auténtica del proyecto GNS3:**
+
+![Topología original del Segundo Parcial](Topologia/Topologia.png)
+
+**Diagrama complementario:**
+
+![Diagrama de la infraestructura](Topologia/Diagrama.png)
 
 ```mermaid
 flowchart TB
@@ -43,7 +49,7 @@ flowchart TB
     F ---|"port2"| U2
 ```
 
-[Documentación detallada de la topología y conexiones](Topologia/README.md)
+[Ver las imágenes de topología](Topologia)
 
 ### Direccionamiento principal
 
@@ -143,7 +149,19 @@ La configuración se realizó en la **interfaz gráfica de FortiGate**. El túne
 - **VPN desactivada:** `Bring Down` en GUI y pérdida de comunicación durante la comprobación.
 - **VPN restablecida:** `Bring Up` y recuperación de respuestas ICMP.
 
-[Configuración FortiGate](Configuracion%20FortiGate/README.md) · [Pruebas detalladas de IPsec](Documentacion/VPN-IPsec.md).
+**Documentación y evidencia:** [Informe Word de VPN IPsec](Configuracion%20FortiGate/Evidencias_VPN_IPsec.docx).
+
+![Monitor FortiGate con túnel activo](Evidencias/VPN/VPN-Up.png)
+
+*Figura. VPN-CISCO en estado activo.*
+
+![Monitor FortiGate con túnel inactivo](Evidencias/VPN/VPN-Inactive.png)
+
+*Figura. VPN-CISCO desactivada desde la interfaz gráfica.*
+
+![Políticas de FortiGate para el tráfico VPN](Evidencias/VPN/VPN-Politicas.png)
+
+*Figura. Políticas de firewall de FortiGate.*
 
 ## 6. Ubuntu Server — instalación y monitoreo Zabbix
 
@@ -156,7 +174,17 @@ snmpget -v2c -c '<COMUNIDAD_PRIVADA>' 10.21.40.2 1.3.6.1.2.1.1.5.0
 
 **Resultado:** servicios `active`; SNMP disponible en verde; datos de `System name`, `System contact`, `System location` y `Uptime`.
 
-[Configuración Zabbix](Configuracion%20Zabbix/README.md) · [Comandos de instalación del servidor Ubuntu](Scripts/ZABBIX-SRV_Instalacion_Config.txt) · [SNMP detallado](Documentacion/Zabbix-SNMP.md).
+**Documentación y evidencias:** [Informe Word Zabbix/SNMP](Configuracion%20Zabbix/Evidencias_Zabbix_SNMP.docx) · [Comandos de instalación Ubuntu](Scripts/ZABBIX-SRV_Instalacion_Config.txt).
+
+![Disponibilidad SNMP del switch en Zabbix](Evidencias/Zabbix/Zabbix-SNMP.png)
+
+*Figura. Disponibilidad SNMP del switch.*
+
+![Últimos datos de Zabbix](Evidencias/Zabbix/Zabbix-Latest-Data.png)
+
+*Figura. Datos recopilados mediante SNMP.*
+
+[Ver captura adicional del host](Evidencias/Zabbix/Zabbix-Host.png).
 
 ## 7. Windows Server — Active Directory, NPS y RADIUS
 
@@ -169,17 +197,27 @@ El servidor `WIN-AD-NPS` (`10.21.40.10`) aloja el dominio `parcial.test` y el se
 | NPS, evento **6273** | Solicitud denegada |
 | Comandos `show aaa servers` / `show aaa user all` | Solicitudes y sesiones registradas |
 
-[Configuración Windows Server](Configuracion%20Windows%20Server/README.md) · [AAA y auditoría](Documentacion/AAA-RADIUS-Windows-Server.md).
+**Documentación y evidencias:** [Informe Word de Windows Server — AD DS/NPS](Configuracion%20Windows%20Server/Evidencias_Windows_Server_AD_NPS.docx) · [Versión sin líneas de fuente](Evidencias/Evidencias_Windows_Server_AD_NPS_Sin_Fuentes.docx).
+
+![Evidencia de Windows Server 01](Evidencias/Windows-Server/WS-01.png)
+
+*Figura. Captura original del servidor Windows durante la práctica.*
+
+![Evidencia de Windows Server 11](Evidencias/Windows-Server/WS-11.png)
+
+*Figura. Evidencia de configuración o comprobación de Windows Server.*
+
+[Consultar las 15 capturas originales](Evidencias/Windows-Server).
 
 ## 8. Hardening — medidas inspiradas en CIS
 
 Se documentaron `no ip source-route`, desactivación de HTTP/HTTPS administrativos, SSHv2 y VTY sin Telnet, cierre de sesión remota a cinco minutos, autenticación local y restricción SNMP con ACL. También se identificaron limitaciones pendientes: hashes tipo 5, VLAN 1, SNMPv2c, algoritmos IPsec antiguos y advertencia de negociación de dúplex en interfaces virtuales.
 
-**No se declara cumplimiento total CIS.** [Ver medidas, comandos y limitaciones](Documentacion/Hardening-CIS.md).
+**No se declara cumplimiento total CIS.** Los controles pueden contrastarse con los [running-config de R1 y SW](Show%20running-config). Para completar la evaluación documental faltan capturas individuales de los comandos de hardening.
 
 ## 9. Evidencias y resultados
 
-Las pruebas del laboratorio se realizaron, pero **las capturas originales todavía deben incorporarse como archivos dentro del repositorio**. No se incluyen imágenes inexistentes ni se presentan reconstrucciones como capturas.
+**Ya se cargaron capturas auténticas** de topología, VPN, Zabbix y Windows Server. Aún faltan capturas individuales de DHCP, SSH/Telnet, algunos comandos Cisco, AAA y hardening para que cada comprobación tenga evidencia visual dentro del repositorio.
 
 | Prueba | Lugar de verificación | Resultado |
 |---|---|---|
@@ -193,7 +231,7 @@ Las pruebas del laboratorio se realizaron, pero **las capturas originales todav�
 | AAA/RADIUS | NPS y R1 | Eventos 6272/6273 y actividad AAA |
 | CIS | Running-config y comandos IOS | Controles implementados documentados |
 
-📷 [Abrir el inventario y las instrucciones para integrar las capturas](Evidencias/README.md).
+📷 [Consultar las capturas originales de VPN, Zabbix y Windows Server](Evidencias/README.md).
 
 ## 10. Conclusiones
 
@@ -203,18 +241,17 @@ Se consiguió conectar dos redes de laboratorio mediante IPsec y demostrar la de
 
 | Carpeta | Contenido |
 |---|---|
-| [Topologia](Topologia/README.md) | Topología, conexiones y ubicación de capturas |
+| [Topologia](Topologia) | Captura original y diagrama |
 | [Direccionamiento](Direccionamiento/README.md) | Plan completo de IP y pruebas |
 | [Show running-config](Show%20running-config) | Configuraciones Cisco R1 y SW |
 | [Scripts](Scripts/ZABBIX-SRV_Instalacion_Config.txt) | Instalación Ubuntu/Zabbix |
-| [Configuracion Zabbix](Configuracion%20Zabbix/README.md) | Resumen del servidor y monitoreo |
-| [Configuracion Windows Server](Configuracion%20Windows%20Server/README.md) | AD DS, DNS, NPS |
-| [Configuracion FortiGate](Configuracion%20FortiGate/README.md) | VPN GUI e IPsec |
-| [Documentacion](Documentacion/Entrega-y-video.md) | VPN, AAA, SNMP, CIS y requisitos de entrega |
-| [Evidencias](Evidencias/README.md) | Capturas auténticas pendientes de integrar |
+| [Configuracion Zabbix](Configuracion%20Zabbix) | Informe Word de Zabbix y SNMP |
+| [Configuracion Windows Server](Configuracion%20Windows%20Server) | Informe Word de AD DS y NPS |
+| [Configuracion FortiGate](Configuracion%20FortiGate) | Informe Word de VPN IPsec |
+| [Evidencias](Evidencias/README.md) | Capturas originales por categoría |
 
-**Entrega:** [guion del video y comprobaciones finales](Documentacion/Entrega-y-video.md).
+**Pendiente para entrega:** enlace de YouTube al comienzo del README, capturas específicas restantes y archivo TXT final de URLs.
 
-> **Seguridad de la publicación:** las copias Cisco visibles ya fueron depuradas para ocultar hashes y secretos de VPN, RADIUS y SNMP. **Como esos valores estuvieron publicados en versiones anteriores, deben rotarse y podrían seguir accesibles en el historial de Git.**
+> **Seguridad de la publicación:** los secretos se ocultaron en las copias visibles de los equipos Cisco, pero los valores previamente publicados pueden seguir accesibles en el historial de Git y deben rotarse.
 
-**Última actualización documental:** 11 de noviembre de 2026.
+**Última revisión documental:** 11 de noviembre de 2026.
