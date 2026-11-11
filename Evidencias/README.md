@@ -30,3 +30,18 @@
 4. Evitar secretos visibles: contraseñas, PSK, comunidad SNMP y claves RADIUS.
 5. Tras cargarlas, insertar las imágenes dentro del **README principal** mediante Markdown (por ejemplo, `![VPN activa](Evidencias/05-vpn-activa.png)`).
 6. Si se adjunta el documento Word de Windows Server, debe mantener sus imágenes originales e identificar que es documentación complementaria, no evidencia sustituida.
+
+
+## Paquete de capturas originales identificado en el chat
+
+Se han seleccionado **23 archivos de evidencia** (incluida una copia DOCX de Windows Server) y un archivo de instrucciones en un paquete ZIP de transferencia, **todavía no incorporado al repositorio**. La separación sigue el esquema de carpetas del laboratorio de referencia:
+
+| Carpeta destino | Archivos preparados | Descripción |
+|---|---|---|
+| `Topologia/` | `Topologia.png` | Captura original del escenario GNS3 del segundo parcial |
+| `Evidencias/Windows-Server/` | `WS-01.png` a `WS-15.png` | Capturas originales de IP, AD DS, usuarios, NPS y RADIUS |
+| `Evidencias/` | `Evidencias_Windows_Server_AD_NPS_Sin_Fuentes.docx` | Documento Word con 15 evidencias auténticas |
+| `Evidencias/VPN/` | `VPN-Up.png`, `VPN-Inactive.png`, `VPN-Politicas.png` | Estados VPN-CISCO activo/inactivo y políticas FortiGate sin NAT |
+| `Evidencias/Zabbix/` | `Zabbix-Host.png`, `Zabbix-SNMP.png`, `Zabbix-Latest-Data.png` | Capturas de la consola web de monitoreo |
+
+El archivo ZIP está preparado como artefacto de la conversación; GitHub no muestra estas imágenes hasta subir los archivos extraídos. Una vez presentes, se incrustarán individualmente en el README principal con pies de figura y sin imágenes generadas.
