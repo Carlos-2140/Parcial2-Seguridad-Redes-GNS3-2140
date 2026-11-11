@@ -47,7 +47,7 @@ ip domain name parcial.local
 !
 !
 !
-username admin privilege 15 secret 5 $1$eNp7$O1ACn2vPrmIt80S7u2DGm0
+! Usuario admin privilege 15 configurado; hash de contraseña omitido en copia pública
 !
 !
 ip tcp synwait-time 5
@@ -57,7 +57,7 @@ ip ssh version 2
 crypto isakmp policy 10
  authentication pre-share
  group 2
-crypto isakmp key Carlos2140 address 10.21.40.130
+! Clave precompartida IPsec omitida en copia pública
 !
 !
 crypto ipsec transform-set VPN-TS esp-des esp-sha-hmac
@@ -92,7 +92,7 @@ ip radius source-interface FastEthernet0/1
 access-list 110 permit ip 10.21.40.0 0.0.0.127 10.21.40.136 0.0.0.7
 no cdp log mismatch duplex
 !
-radius-server host 10.21.40.10 auth-port 1812 acct-port 1813 key 7 072C205E42060A5746465B
+! RADIUS host 10.21.40.10 auth-port 1812 acct-port 1813; clave compartida omitida en copia pública
 !
 control-plane
 !
