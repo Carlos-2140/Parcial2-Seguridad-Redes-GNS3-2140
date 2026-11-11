@@ -67,3 +67,11 @@ La red remota original **10.21.40.136/28** causaba conflicto con la WAN en Forti
 ## Nota de seguridad
 
 No incluir contraseñas, secretos RADIUS, comunidades SNMP privadas ni claves VPN en los archivos públicos del repositorio.
+
+## VPN comprobada
+
+- FortiGate port1 `10.21.40.130/30` y R1 FastEthernet0/0 `10.21.40.129/30`: ping 5/5 exitoso.
+- Selectores IPsec: Cisco `10.21.40.0/25` ↔ FortiGate `10.21.40.136/29`.
+- Túnel `VPN-CISCO` activo en GUI e ISAKMP `QM_IDLE` en R1; tráfico cifrado y descifrado verificado.
+- Ping entre Usuario-1 y Usuario-2: 4/4 con túnel activo, 0/4 tras `Bring Down` desde la GUI, y 3/4 al restaurarlo (`Up`).
+- El prefijo remoto definitivo sigue siendo `/29`.
