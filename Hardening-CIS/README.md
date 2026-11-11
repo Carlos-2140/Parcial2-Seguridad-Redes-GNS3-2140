@@ -28,3 +28,7 @@ Las evidencias originales de SSH, rechazo de Telnet y SNMP/Zabbix se incorporar�
 Captura de consola del 11/11/2026: `show run | include service password-encryption` devolvió `service password-encryption`; `show run | include ip http` devolvió `no ip http server` y `no ip http secure-server`; `show run | include ip source-route` devolvió `no ip source-route`. Se verificó la presencia de estas directivas en configuración. La captura original se identificó como `38_Hardening_Router.png` y aún debe incorporarse como imagen a GitHub.
 
 Estas medidas reducen exposición de servicios de administración y evitan opciones de enrutamiento de origen, pero `service password-encryption` usa ofuscación reversible para contraseñas tipo 7 y no sustituye hashes robustos.
+
+## Verificación adicional en SW-SEDE
+
+Captura de consola del 11/11/2026: `show run | include service password-encryption` devolvió `service password-encryption`; `show run | include ip http` devolvió `no ip http server` y `no ip http secure-server`; `show run | include ip source-route` devolvió `no ip source-route`. Estas directivas están verificadas en la configuración del switch. La captura se identificó como `39_Hardening_Switch.png`; su archivo de imagen original está pendiente de incorporación en GitHub.
