@@ -7,7 +7,7 @@ Laboratorio de infraestructura con router Cisco R1-SEDE, switch Cisco IOSvL2 SW-
 - [Direccionamiento y conexiones físicas](Direccionamiento/README.md)
 - [Hardening implementado y comprobaciones](Hardening-CIS/README.md)
 - [Inventario de evidencias](imagenes/README.md)
-- [Configuraciones de equipos de red](configuraciones/README.md)
+- [Configuraciones de equipos de red](Show%20Running-config)
 
 ## Estado de implementación
 
