@@ -4,7 +4,7 @@
 
 ## 🎬 Video demostrativo
 
-**Pendiente de publicación.** El enlace de YouTube de la demostración (duración máxima 10 minutos) se incorporará aquí, al principio del README, antes de la entrega.
+**Pendiente:** enlace de YouTube. La demostración debe durar como máximo 10 minutos e incluir fecha/hora visible, rostro y voz.
 
 ---
 
@@ -199,15 +199,72 @@ El servidor `WIN-AD-NPS` (`10.21.40.10`) aloja el dominio `parcial.test` y el se
 
 **Documentación y evidencias:** [Informe Word de Windows Server — AD DS/NPS](Configuracion%20Windows%20Server/Evidencias_Windows_Server_AD_NPS.docx) · [Versión sin líneas de fuente](Evidencias/Evidencias_Windows_Server_AD_NPS_Sin_Fuentes.docx).
 
-![Evidencia de Windows Server 01](Evidencias/Windows-Server/WS-01.png)
+<details>
+<summary><strong>Ver las 15 capturas originales de Windows Server</strong></summary>
 
-*Figura. Captura original del servidor Windows durante la práctica.*
+**Captura WS-01**
 
-![Evidencia de Windows Server 11](Evidencias/Windows-Server/WS-11.png)
+![Evidencia original de Windows Server WS-01](Evidencias/Windows-Server/WS-01.png)
 
-*Figura. Evidencia de configuración o comprobación de Windows Server.*
+**Captura WS-02**
 
-[Consultar las 15 capturas originales](Evidencias/Windows-Server).
+![Evidencia original de Windows Server WS-02](Evidencias/Windows-Server/WS-02.png)
+
+**Captura WS-03**
+
+![Evidencia original de Windows Server WS-03](Evidencias/Windows-Server/WS-03.png)
+
+**Captura WS-04**
+
+![Evidencia original de Windows Server WS-04](Evidencias/Windows-Server/WS-04.png)
+
+**Captura WS-05**
+
+![Evidencia original de Windows Server WS-05](Evidencias/Windows-Server/WS-05.png)
+
+**Captura WS-06**
+
+![Evidencia original de Windows Server WS-06](Evidencias/Windows-Server/WS-06.png)
+
+**Captura WS-07**
+
+![Evidencia original de Windows Server WS-07](Evidencias/Windows-Server/WS-07.png)
+
+**Captura WS-08**
+
+![Evidencia original de Windows Server WS-08](Evidencias/Windows-Server/WS-08.png)
+
+**Captura WS-09**
+
+![Evidencia original de Windows Server WS-09](Evidencias/Windows-Server/WS-09.png)
+
+**Captura WS-10**
+
+![Evidencia original de Windows Server WS-10](Evidencias/Windows-Server/WS-10.png)
+
+**Captura WS-11**
+
+![Evidencia original de Windows Server WS-11](Evidencias/Windows-Server/WS-11.png)
+
+**Captura WS-12**
+
+![Evidencia original de Windows Server WS-12](Evidencias/Windows-Server/WS-12.png)
+
+**Captura WS-13**
+
+![Evidencia original de Windows Server WS-13](Evidencias/Windows-Server/WS-13.png)
+
+**Captura WS-14**
+
+![Evidencia original de Windows Server WS-14](Evidencias/Windows-Server/WS-14.png)
+
+**Captura WS-15**
+
+![Evidencia original de Windows Server WS-15](Evidencias/Windows-Server/WS-15.png)
+
+</details>
+
+Las imágenes muestran distintas etapas de configuración y comprobación de Windows Server. Para las descripciones detalladas, consultar el informe Word correspondiente.
 
 ## 8. Hardening — medidas inspiradas en CIS
 
@@ -215,43 +272,14 @@ Se documentaron `no ip source-route`, desactivación de HTTP/HTTPS administrativ
 
 **No se declara cumplimiento total CIS.** Los controles pueden contrastarse con los [running-config de R1 y SW](Show%20running-config). Para completar la evaluación documental faltan capturas individuales de los comandos de hardening.
 
-## 9. Evidencias y resultados
+(Configuracion%20FortiGate/Evidencias_VPN_IPsec.docx) |
+| SNMP/Zabbix | Switch disponible y datos actuales | [SNMP](Evidencias/Zabbix/Zabbix-SNMP.png), [Latest data](Evidencias/Zabbix/Zabbix-Latest-Data.png), [Host](Evidencias/Zabbix/Zabbix-Host.png) |
+| AAA/RADIUS | NPS registró autenticaciones admitidas y denegadas; AAA Cisco operativo | [15 capturas Windows](Evidencias/Windows-Server), [informe Word](Configuracion%20Windows%20Server/Evidencias_Windows_Server_AD_NPS.docx); **pendiente captura específica de `show aaa servers`** |
+| Hardening CIS | SSHv2, HTTP deshabilitado, VTY temporizadas, ACL SNMP | Configuraciones Cisco; **pendientes capturas directas de comandos** |
 
-**Ya se cargaron capturas auténticas** de topología, VPN, Zabbix y Windows Server. Aún faltan capturas individuales de DHCP, SSH/Telnet, algunos comandos Cisco, AAA y hardening para que cada comprobación tenga evidencia visual dentro del repositorio.
+Las imágenes de FortiGate muestran el estado del túnel en momentos distintos de la prueba; no deben interpretarse como estados simultáneos. Las capturas son auténticas y los diagramas complementarios se presentan como material explicativo.
 
-| Prueba | Lugar de verificación | Resultado |
-|---|---|---|
-| Topología física | Lienzo de GNS3 | Dispositivos y enlaces visibles |
-| DHCP | Usuario-1 y R1 | `10.21.40.50` asignada |
-| SSH / Telnet | R1 y SW | SSH funcional y Telnet no habilitado |
-| VPN activa | FortiGate y R1 | `Up`, `QM_IDLE`, ping exitoso |
-| VPN desconectada | FortiGate y Windows | `Inactive`, ping sin respuesta |
-| VPN restaurada | FortiGate y Windows | Comunicación recuperada |
-| Zabbix | GUI y terminal Ubuntu | Estado SNMP verde y métricas |
-| AAA/RADIUS | NPS y R1 | Eventos 6272/6273 y actividad AAA |
-| CIS | Running-config y comandos IOS | Controles implementados documentados |
+[Explorar la carpeta completa de evidencias](Evidencias) · [Consultar el inventario](Evidencias/README.md)
 
-📷 [Consultar las capturas originales de VPN, Zabbix y Windows Server](Evidencias/README.md).
+---
 
-## 10. Conclusiones
-
-Se consiguió conectar dos redes de laboratorio mediante IPsec y demostrar la dependencia del túnel para el tráfico entre usuarios; además se verificaron direccionamiento, DHCP, SSH, disponibilidad SNMP en Zabbix y autenticación AAA/RADIUS con eventos aceptados y rechazados. Las limitaciones de versiones y algoritmos se consignan explícitamente, sin atribuir al entorno una seguridad de producción.
-
-## 11. Archivos del proyecto
-
-| Carpeta | Contenido |
-|---|---|
-| [Topologia](Topologia) | Captura original y diagrama |
-| [Direccionamiento](Direccionamiento/README.md) | Plan completo de IP y pruebas |
-| [Show running-config](Show%20running-config) | Configuraciones Cisco R1 y SW |
-| [Scripts](Scripts/ZABBIX-SRV_Instalacion_Config.txt) | Instalación Ubuntu/Zabbix |
-| [Configuracion Zabbix](Configuracion%20Zabbix) | Informe Word de Zabbix y SNMP |
-| [Configuracion Windows Server](Configuracion%20Windows%20Server) | Informe Word de AD DS y NPS |
-| [Configuracion FortiGate](Configuracion%20FortiGate) | Informe Word de VPN IPsec |
-| [Evidencias](Evidencias/README.md) | Capturas originales por categoría |
-
-**Pendiente para entrega:** enlace de YouTube al comienzo del README, capturas específicas restantes y archivo TXT final de URLs.
-
-> **Seguridad de la publicación:** los secretos se ocultaron en las copias visibles de los equipos Cisco, pero los valores previamente publicados pueden seguir accesibles en el historial de Git y deben rotarse.
-
-**Última revisión documental:** 11 de noviembre de 2026.
