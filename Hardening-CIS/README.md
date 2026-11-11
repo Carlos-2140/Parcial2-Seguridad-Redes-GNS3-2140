@@ -22,3 +22,9 @@ Este documento relaciona medidas de endurecimiento presentes en el laboratorio c
 ## Pruebas de funcionamiento
 
 Las evidencias originales de SSH, rechazo de Telnet y SNMP/Zabbix se incorporarán en [imagenes](../imagenes/README.md). Se documentará únicamente lo que se haya ejecutado y observado en el entorno GNS3.
+
+## Verificación adicional en R1-SEDE
+
+Captura de consola del 11/11/2026: `show run | include service password-encryption` devolvió `service password-encryption`; `show run | include ip http` devolvió `no ip http server` y `no ip http secure-server`; `show run | include ip source-route` devolvió `no ip source-route`. Se verificó la presencia de estas directivas en configuración. La captura original se identificó como `38_Hardening_Router.png` y aún debe incorporarse como imagen a GitHub.
+
+Estas medidas reducen exposición de servicios de administración y evitan opciones de enrutamiento de origen, pero `service password-encryption` usa ofuscación reversible para contraseñas tipo 7 y no sustituye hashes robustos.
