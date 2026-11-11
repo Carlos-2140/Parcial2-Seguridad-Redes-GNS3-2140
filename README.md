@@ -13,7 +13,7 @@ Laboratorio de infraestructura con router Cisco R1-SEDE, switch Cisco IOSvL2 SW-
 
 | Requisito | Resultado comprobado |
 |---|---|
-| VPN Cisco–FortiGate | Pendiente de configurar y demostrar |
+| VPN Cisco–FortiGate | Enlace físico verificado (ping 5/5 a 10.21.40.130); túnel IPsec pendiente de configurar y demostrar |
 | DHCP en router | Verificado: Usuario-1 recibió 10.21.40.50/25 desde 10.21.40.1 |
 | SSH router y switch | Verificado: acceso remoto por SSHv2 en ambos; Telnet TCP/23 rechazado |
 | Direccionamiento y conectividad | Verificada la LAN principal; pendiente la red remota |
@@ -31,6 +31,8 @@ Laboratorio de infraestructura con router Cisco R1-SEDE, switch Cisco IOSvL2 SW-
 **Windows Server WIN-AD-NPS:** 10.21.40.10/25, gateway 10.21.40.1; conectividad comprobada. El servicio RADIUS todavía requiere pruebas de autenticación.
 
 **Ubuntu ZABBIX-SRV:** 10.21.40.20/25; aplicación Zabbix 7.0 y sus servicios en ejecución; datos SNMP recientes de SW-SEDE visibles en la interfaz.
+
+**FortiGate:** port1 10.21.40.130/30 y port2 10.21.40.137/29, verificados; LAN remota 10.21.40.136/29. Se corrigió el prefijo original /28 para evitar solapamiento con la WAN. VPN IPsec pendiente.
 
 **Cliente Usuario-1:** Windows, dirección 10.21.40.50 por DHCP, pruebas de conectividad exitosas.
 
