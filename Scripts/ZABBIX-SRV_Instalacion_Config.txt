@@ -1,0 +1,125 @@
+INSTALACION Y CONFIGURACION DE ZABBIX SERVER EN UBUNTU 24.04.5 LTS
+Laboratorio Parcial 2 - GNS3
+
+Equipo: ZABBIX-SRV
+IP LAN: 10.21.40.20/25
+Gateway: 10.21.40.1
+Switch monitoreado: SW-SEDE (10.21.40.2)
+
+NOTA: Este archivo documenta los comandos empleados durante la practica.
+No es una exportacion automatica del historial de Ubuntu.
+Cambie los valores de ejemplo de contrasenas antes de ejecutarlos.
+
+1. COMPROBACION DE SISTEMA Y CONECTIVIDAD
+--------------------------------------------------
+lsb_release -a
+ip -br addr
+ip route
+ping -c 4 10.21.40.1
+ping -c 4 8.8.8.8
+getent hosts repo.zabbix.com
+
+2. CONFIGURACION IP ESTATICA
+--------------------------------------------------
+sudo hostnamectl set-hostname ZABBIX-SRV
+sudo cp /etc/netplan/50-cloud-init.yaml /etc/netplan/50-cloud-init.yaml.bak
+sudo nano /etc/netplan/50-cloud-init.yaml
+
+Contenido de Netplan para la LAN:
+network:
+  version: 2
+  ethernets:
+    ens3:
+      dhcp4: false
+      addresses:
+        - 10.21.40.20/25
+      routes:
+        - to: default
+          via: 10.21.40.1
+      nameservers:
+        addresses:
+          - 8.8.8.8
+
+Cuando se conecto NAT temporal a la segunda interfaz, se agrego ens4
+con DHCP y prioridad de ruta mas alta, conservando ens3 para la LAN.
+Esta conexion NAT se utilizo para descargar paquetes y no debe quedar
+como ruta alternativa durante la demostracion final de la VPN.
+
+sudo chmod 600 /etc/netplan/50-cloud-init.yaml
+sudo netplan generate
+sudo netplan apply
+
+3. INSTALACION DE DEPENDENCIAS
+--------------------------------------------------
+sudo apt update
+sudo apt install -y snmp mariadb-server wget
+
+4. REPOSITORIO OFICIAL E INSTALACION DE ZABBIX 7.0 LTS
+--------------------------------------------------
+wget https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest+ubuntu24.04_all.deb
+sudo dpkg -i zabbix-release_latest+ubuntu24.04_all.deb
+sudo apt update
+sudo apt install -y zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent
+
+5. MARIADB: CREAR BASE DE DATOS Y USUARIO
+--------------------------------------------------
+sudo systemctl enable --now mariadb
+sudo mariadb
+
+Dentro de MariaDB:
+CREATE DATABASE zabbix CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+CREATE USER 'zabbix'@'localhost' IDENTIFIED BY 'TU_PASSWORD_PRIVADO';
+GRANT ALL PRIVILEGES ON zabbix.* TO 'zabbix'@'localhost';
+SET GLOBAL log_bin_trust_function_creators = 1;
+EXIT;
+
+6. IMPORTAR EL ESQUEMA
+--------------------------------------------------
+zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 -uzabbix -p zabbix
+sudo mariadb -e "SET GLOBAL log_bin_trust_function_creators = 0;"
+
+7. CONFIGURAR ZABBIX SERVER
+--------------------------------------------------
+sudo nano /etc/zabbix/zabbix_server.conf
+
+Establecer la linea:
+DBPassword=TU_PASSWORD_PRIVADO
+
+8. INICIAR Y VERIFICAR SERVICIOS
+--------------------------------------------------
+sudo systemctl restart zabbix-server zabbix-agent apache2
+sudo systemctl enable zabbix-server zabbix-agent apache2
+sudo systemctl is-active mariadb zabbix-server zabbix-agent apache2
+
+dpkg -l | grep zabbix
+
+Resultado observado en la practica: los cuatro servicios mostraron active.
+
+9. CONSULTAS SNMP DESDE UBUNTU AL SWITCH
+--------------------------------------------------
+# Sustituir COMUNIDAD_SNMP_PRIVADA por el valor configurado en el switch.
+snmpget -v2c -c COMUNIDAD_SNMP_PRIVADA 10.21.40.2 1.3.6.1.2.1.1.5.0
+snmpget -v2c -c COMUNIDAD_SNMP_PRIVADA 10.21.40.2 1.3.6.1.2.1.1.3.0
+
+10. CONFIGURACION DE LA INTERFAZ WEB
+--------------------------------------------------
+URL desde Usuario-1: http://10.21.40.20/zabbix
+Nombre del servidor: ZABBIX-SRV
+Zona horaria: America/Santo_Domingo
+Base de datos: zabbix (MariaDB)
+
+Host agregado a Zabbix:
+Nombre: SW-SEDE
+IP: 10.21.40.2
+Interfaz: SNMPv2, puerto UDP 161
+Grupo: Network devices
+Plantilla: Cisco IOS by SNMP
+
+Comprobaciones observadas: indicador SNMP verde y valores recientes de
+System contact, System description, System location, System name y Uptime.
+
+SEGURIDAD
+--------------------------------------------------
+No publique las contrasenas de MariaDB ni la comunidad SNMP real en GitHub.
+Las lineas con TU_PASSWORD_PRIVADO y COMUNIDAD_SNMP_PRIVADA son valores
+de referencia y deben sustituirse solamente en entornos autorizados.
