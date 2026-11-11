@@ -215,6 +215,6 @@ Se consiguió conectar dos redes de laboratorio mediante IPsec y demostrar la de
 
 **Entrega:** [guion del video y comprobaciones finales](Documentacion/Entrega-y-video.md).
 
-> **Seguridad de la publicación:** los archivos Cisco actuales del repositorio aún contienen secretos que deben redactarse y rotarse. Las claves, comunidades SNMP y secretos RADIUS no deben mantenerse visibles en repositorios públicos.
+> **Seguridad de la publicación:** las copias Cisco visibles ya fueron depuradas para ocultar hashes y secretos de VPN, RADIUS y SNMP. **Como esos valores estuvieron publicados en versiones anteriores, deben rotarse y podrían seguir accesibles en el historial de Git.**
 
 **Última actualización documental:** 11 de noviembre de 2026.
