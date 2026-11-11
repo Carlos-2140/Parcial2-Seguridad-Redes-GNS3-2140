@@ -4,7 +4,7 @@
 
 ## 🎬 Video demostrativo
 
-**Pendiente:** enlace de YouTube. La demostración debe durar como máximo 10 minutos e incluir fecha/hora visible, rostro y voz.
+▶️ **[Ver demostración del Segundo Parcial en YouTube](https://www.youtube.com/watch?v=1PUEc_N8MYw)]**
 
 ---
 
