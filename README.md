@@ -53,3 +53,5 @@ No se publican contraseñas, hashes de autenticación, secretos compartidos RADI
 - Tras bajar el túnel: ping Usuario-1 a Usuario-2 con 0/4 respuestas. Esta secuencia documenta dependencia del túnel IPsec; la caída temporal por Bring Down no equivale a deshabilitación administrativa permanente.
 - Cisco R1: `show crypto isakmp sa` mostró `QM_IDLE ACTIVE`; `show crypto ipsec sa` mostró 19 encapsulados y 16 desencapsulados, SAs ESP activas.
 - NPS: eventos Windows Security 6272 (concedido) y 6273 (denegado); acceso SSH con `adminradius` exitoso. Cisco: accounting 5 solicitudes y 5 éxitos, `show aaa user all` mostró sesión EXEC por RADIUS.
+
+- Comprobación adicional después de la restauración de VPN-CISCO: ping de Usuario-1 a 10.21.40.138 con 4/4 respuestas (0 % pérdida, media de 18 ms). Captura original identificada como `37_VPN_Restaurada.png`; pendiente incorporarla como archivo de imagen al repositorio.
