@@ -6,7 +6,7 @@
 |---|---|---|---|
 | LAN principal | 10.21.40.0/25 | 255.255.255.128 | Router, switch, servidores y Usuario-1 |
 | Enlace R1–FortiGate | 10.21.40.128/30 | 255.255.255.252 | Conexión entre extremos de VPN |
-| LAN remota | 10.21.40.136/28 | 255.255.255.240 | FortiGate Port2 y Usuario-2 |
+| LAN remota | 10.21.40.136/29 | 255.255.255.248 | FortiGate Port2 y Usuario-2 |
 
 ## Equipos y direcciones
 
@@ -18,11 +18,11 @@
 | WIN-AD-NPS | Ethernet | 10.21.40.10/25 | 10.21.40.1 | Verificada, estática |
 | ZABBIX-SRV | ens3 | 10.21.40.20/25 | 10.21.40.1 | Verificada, estática |
 | Usuario-1 (Windows) | Ethernet | 10.21.40.50/25 | 10.21.40.1 | Verificada por DHCP |
-| FortiGate (enlace Cisco) | Port1 | 10.21.40.130/30 | — | Planificada; pendiente de prueba |
-| FortiGate (LAN remota) | Port2 | 10.21.40.137/28 | — | Planificada; pendiente de prueba |
-| Usuario-2 (Windows) | Ethernet | 10.21.40.138/28 | 10.21.40.137 | Planificada; pendiente de prueba |
+| FortiGate (enlace Cisco) | Port1 | 10.21.40.130/30 | — | Verificada en GUI; ping desde R1 5/5 |
+| FortiGate (LAN remota) | Port2 | 10.21.40.137/29 | — | Verificada: ping desde Usuario-2 4/4 |
+| Usuario-2 (Windows) | Ethernet | 10.21.40.138/29 | 10.21.40.137 | Configuración de LAN remota; origen comprobado por pruebas desde Windows |
 
-Las direcciones del FortiGate y Usuario-2 son parte del plan y no se presentan como configuraciones verificadas. El túnel IPsec y la política de acceso entre LAN están pendientes.
+Las direcciones de FortiGate port1 y port2 ya se configuraron y comprobaron mediante GUI y pruebas de conectividad; la LAN remota se ajustó de /28 a /29 para evitar solapamiento con el enlace /30. El túnel IPsec y la política de acceso entre LAN siguen pendientes.
 
 ## Conexiones físicas en GNS3
 
@@ -50,9 +50,15 @@ Se agregó temporalmente un nodo NAT de GNS3 conectado a la segunda interfaz de 
 
 El DNS del DHCP deberá actualizarse a `10.21.40.10` cuando el servicio DNS de Active Directory esté operativo, si los clientes se integrarán al dominio.
 
+## Corrección de subred remota
+
+La red remota original **10.21.40.136/28** causaba conflicto con la WAN en FortiGate. Se corrigió a **10.21.40.136/29** (máscara **255.255.255.248**), conservando las IP **10.21.40.137** (FortiGate port2) y **10.21.40.138** (Usuario-2). Este prefijo /29 debe usarse también en los selectores de tráfico y rutas de la VPN.
+
 ## Comprobaciones realizadas
 
 - R1-SEDE: FastEthernet0/0 y FastEthernet0/1 en estado `up/up`.
+- R1-SEDE hacia FortiGate port1 (10.21.40.130): ping 5/5 exitoso.
+- Usuario-2 hacia FortiGate port2 (10.21.40.137): ping 4/4 exitoso.
 - SW-SEDE: VLAN 1 en `up/up`; ping a `10.21.40.1` con 5/5 respuestas en la segunda prueba.
 - Usuario-1: ping a `10.21.40.1` y `10.21.40.2` con 4/4 respuestas.
 - WIN-AD-NPS: ping a router `10.21.40.1` y Usuario-1 `10.21.40.50` con 4/4 respuestas.
