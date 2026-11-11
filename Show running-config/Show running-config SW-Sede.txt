@@ -20,7 +20,7 @@ boot-end-marker
 !
 !
 !
-username admin privilege 15 secret 5 $1$l5kD$Ddeif.4lh5fa5/yWfnkJt.
+! Usuario admin privilege 15 configurado; hash de contraseña omitido en copia pública
 no aaa new-model
 !
 !
@@ -129,7 +129,7 @@ access-list 10 permit 10.21.40.20
 !
 !
 !
-snmp-server community ZabbixRO2140 RO 10
+! Comunidad SNMP RO asociada a ACL 10: valor privado omitido
 snmp-server location LAB-GNS3
 snmp-server contact Administrador-Red
 !
