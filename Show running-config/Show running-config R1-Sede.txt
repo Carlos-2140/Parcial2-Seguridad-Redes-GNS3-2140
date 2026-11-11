@@ -1,0 +1,116 @@
+Show running-config R1-Sede
+
+R1-SEDE#show running-config
+Building configuration...
+
+Current configuration : 2019 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R1-SEDE
+!
+boot-start-marker
+boot-end-marker
+!
+!
+aaa new-model
+!
+!
+aaa authentication login default group radius local
+aaa authorization exec default group radius local
+aaa accounting exec default start-stop group radius
+!
+aaa session-id common
+memory-size iomem 5
+no ip source-route
+no ip icmp rate-limit unreachable
+ip cef
+!
+!
+ip auth-proxy max-nodata-conns 3
+ip admission max-nodata-conns 3
+no ip dhcp use vrf connected
+ip dhcp excluded-address 10.21.40.1 10.21.40.49
+!
+ip dhcp pool LAN-USUARIOS
+   network 10.21.40.0 255.255.255.128
+   default-router 10.21.40.1
+   dns-server 8.8.8.8
+!
+!
+no ip domain lookup
+ip domain name parcial.local
+!
+!
+!
+!
+username admin privilege 15 secret 5 $1$eNp7$O1ACn2vPrmIt80S7u2DGm0
+!
+!
+ip tcp synwait-time 5
+ip ssh version 2
+!
+!
+crypto isakmp policy 10
+ authentication pre-share
+ group 2
+crypto isakmp key Carlos2140 address 10.21.40.130
+!
+!
+crypto ipsec transform-set VPN-TS esp-des esp-sha-hmac
+!
+crypto map VPN-MAP 10 ipsec-isakmp
+ set peer 10.21.40.130
+ set transform-set VPN-TS
+ match address 110
+!
+!
+!
+interface FastEthernet0/0
+ description ENLACE_FORTIGATE
+ ip address 10.21.40.129 255.255.255.252
+ duplex auto
+ speed auto
+ crypto map VPN-MAP
+!
+interface FastEthernet0/1
+ description LAN_PRINCIPAL
+ ip address 10.21.40.1 255.255.255.128
+ duplex auto
+ speed auto
+!
+ip forward-protocol nd
+ip route 10.21.40.136 255.255.255.248 10.21.40.130
+!
+no ip http server
+no ip http secure-server
+!
+ip radius source-interface FastEthernet0/1
+access-list 110 permit ip 10.21.40.0 0.0.0.127 10.21.40.136 0.0.0.7
+no cdp log mismatch duplex
+!
+radius-server host 10.21.40.10 auth-port 1812 acct-port 1813 key 7 072C205E42060A5746465B
+!
+control-plane
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line vty 0 4
+ exec-timeout 5 0
+ transport input ssh
+!
+!
+end
+
