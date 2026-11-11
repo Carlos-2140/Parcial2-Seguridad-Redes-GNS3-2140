@@ -1,10 +1,30 @@
 # Parcial 2 — Seguridad de Redes en GNS3
 
-**Video de demostración (máximo 10 minutos): pendiente de publicar.** Se agregará aquí el enlace directo a YouTube antes de la entrega.
+**Segundo parcial · Laboratorio de redes y seguridad · GNS3 · Cisco IOS / IOSvL2 · FortiGate 7.0.9 · Windows Server · Ubuntu Server 24.04.5 · Zabbix 7.0**
 
-Laboratorio de seguridad y administración de red desarrollado en GNS3 con **Cisco IOS, Cisco IOSvL2, FortiGate 7.0.9, Windows Server con AD DS/NPS, Ubuntu Server con Zabbix y dos clientes**. La documentación distingue configuraciones observadas, pruebas ejecutadas y evidencias que todavía deben incorporarse al repositorio.
+## 🎬 Video demostrativo
 
-## Topología lógica
+**Pendiente de publicación.** El enlace de YouTube de la demostración (duración máxima 10 minutos) se incorporará aquí, al principio del README, antes de la entrega.
+
+---
+
+## 1. Introducción y objetivos
+
+Este laboratorio integra una red principal Cisco y una red remota FortiGate mediante **VPN Site-to-Site IPsec**, junto con DHCP, administración SSH, autenticación centralizada **AAA/RADIUS**, monitoreo **SNMP/Zabbix** y medidas de **hardening inspiradas en CIS**.
+
+Los objetivos son:
+
+1. Construir una topología funcional en GNS3, asignando direcciones derivadas de `10.21.40.0`.
+2. Asignar IP dinámica al primer cliente mediante el servicio DHCP de R1.
+3. Administrar router y switch por SSH con cuentas locales, sin habilitar Telnet.
+4. Proteger el tráfico entre las LAN de Cisco y FortiGate mediante IPsec, y comprobar que deja de pasar cuando se desactiva el túnel.
+5. Monitorear el switch desde Zabbix por SNMP de solo lectura restringido.
+6. Integrar Windows Server AD DS/NPS para AAA/RADIUS, con registro de accesos aceptados y rechazados.
+7. Documentar controles de endurecimiento y evidencias originales.
+
+## 2. Topología de red
+
+La **captura auténtica de GNS3** ya fue suministrada durante la práctica; está pendiente de cargarse como `Topologia/Topologia.png`. No se incrusta todavía para evitar enlaces de imagen rotos.
 
 ```mermaid
 flowchart TB
@@ -13,56 +33,188 @@ flowchart TB
     S["SW-SEDE<br/>Cisco IOSvL2"]
     AD["WIN-AD-NPS<br/>10.21.40.10/25"]
     Z["ZABBIX-SRV<br/>10.21.40.20/25"]
-    U1["Usuario-1<br/>10.21.40.50/25 (DHCP)"]
+    U1["Usuario-1<br/>10.21.40.50/25 · DHCP"]
     U2["Usuario-2<br/>10.21.40.138/29"]
-    R <-->|"Fa0/0 10.21.40.129/30 ↔ port1 10.21.40.130/30"| F
-    R ---|"Fa0/1 10.21.40.1/25 ↔ Gi0/0"| S
+    R ---|"Fa0/0 ↔ port1"| F
+    R ---|"Fa0/1 ↔ Gi0/0"| S
     S ---|"Gi0/1"| AD
     S ---|"Gi0/2"| Z
     S ---|"Gi0/3"| U1
-    F ---|"port2 10.21.40.137/29"| U2
+    F ---|"port2"| U2
 ```
 
-La VPN IPsec conecta de forma lógica la LAN **10.21.40.0/25** con la LAN remota **10.21.40.136/29**, usando el enlace **10.21.40.128/30** entre R1 y FortiGate. El diagrama lógico no sustituye la captura auténtica de la topología de GNS3 requerida como evidencia.
+[Documentación detallada de la topología y conexiones](Topologia/README.md)
 
-## Estructura del repositorio
+### Direccionamiento principal
 
-| Recurso | Contenido |
-|---|---|
-| [Direccionamiento](Direccionamiento/README.md) | Plan de IP, subredes, conexiones físicas y comprobaciones |
-| [Show running-config — R1](Show%20running-config/Show%20running-config%20R1-Sede.txt) | Configuración Cisco del router |
-| [Show running-config — SW](Show%20running-config/Show%20running-config%20SW-Sede.txt) | Configuración Cisco del switch |
-| [Script de Ubuntu/Zabbix](Scripts/ZABBIX-SRV_Instalacion_Config.txt) | Procedimiento de instalación y monitoreo |
-| [VPN IPsec](Documentacion/VPN-IPsec.md) | Selectores, políticas y pruebas de túnel |
-| [Active Directory y RADIUS](Documentacion/AAA-RADIUS-Windows-Server.md) | NPS, AAA Cisco y registros de acceso |
-| [SNMP y Zabbix](Documentacion/Zabbix-SNMP.md) | Servidor de monitoreo, ACL y validación |
-| [Endurecimiento](Documentacion/Hardening-CIS.md) | Controles inspirados en CIS y limitaciones |
-| [Evidencias](Evidencias/README.md) | Inventario de capturas auténticas por adjuntar |
-| [Entrega y video](Documentacion/Entrega-y-video.md) | Guion de demostración y lista de verificación |
-
-## Requisitos y resultados
-
-| Criterio | Implementación / comprobación | Estado documental |
+| Dispositivo / interfaz | IPv4 | Función |
 |---|---|---|
-| VPN Cisco–FortiGate | ISAKMP `QM_IDLE`, SAs ESP y ping entre redes; interrupción al bajar túnel en GUI | Verificado; faltan capturas en GitHub |
-| DHCP desde router | Pool `LAN-USUARIOS` y concesión `10.21.40.50` | Verificado; falta captura en GitHub |
-| SSH seguro frente a Telnet | SSHv2 en R1/SW; prueba de puerto 23 fallida | Verificado; falta captura en GitHub |
-| Direccionamiento y conectividad | IP de 10.21.40.0 y pruebas LAN | Documentado |
-| SNMP de switch hacia Zabbix | ACL que limita origen a `10.21.40.20`; disponibilidad SNMP y datos | Verificado; falta captura en GitHub |
-| Endurecimiento basado en CIS | Servicios HTTP deshabilitados, SSH y límites de sesión | Documentado con excepciones |
-| AAA/RADIUS y auditoría | NPS en Windows Server, eventos 6272 y 6273, registros AAA Cisco | Verificado; falta captura en GitHub |
-| Documentación, imágenes y video | Estructura de contenidos publicada | **Pendiente:** subir imágenes auténticas y enlace del video |
+| R1-SEDE, FastEthernet0/1 | `10.21.40.1/25` | Puerta de enlace LAN principal |
+| R1-SEDE, FastEthernet0/0 | `10.21.40.129/30` | Enlace a FortiGate |
+| SW-SEDE, VLAN 1 | `10.21.40.2/25` | Gestión y SNMP |
+| WIN-AD-NPS | `10.21.40.10/25` | AD DS, DNS y NPS |
+| ZABBIX-SRV, ens3 | `10.21.40.20/25` | Monitoreo |
+| Usuario-1 | `10.21.40.50/25` | Cliente DHCP |
+| FortiGate, port1 | `10.21.40.130/30` | Enlace Cisco |
+| FortiGate, port2 | `10.21.40.137/29` | Puerta de enlace LAN remota |
+| Usuario-2 | `10.21.40.138/29` | Cliente de LAN remota |
 
-## Comprobaciones centrales
+**Subredes:** LAN principal `10.21.40.0/25`; tránsito Cisco–FortiGate `10.21.40.128/30`; LAN remota `10.21.40.136/29`.
 
-- **VPN activa:** `show crypto isakmp sa` en estado `QM_IDLE`; `show crypto ipsec sa` con contadores de encapsulación/decapsulación; ping de Usuario-1 a Usuario-2 exitoso.
-- **VPN desactivada:** desde FortiGate GUI se llevó el túnel a `Inactive` y se verificó pérdida de comunicación; al restablecerlo retornó la conectividad.
-- **AAA:** acceso remoto autorizado mediante `adminradius` y eventos de NPS **6272** (aceptado) y **6273** (rechazado).
-- **Zabbix:** servicios MariaDB, Apache, Zabbix Server y Agent activos; switch visible por SNMP con datos reales.
-- **Servicios de administración:** acceso SSH; Telnet no habilitado en las líneas VTY de R1/SW.
+[Consultar direccionamiento completo y pruebas de conectividad](Direccionamiento/README.md).
 
-## Seguridad y alcance
+## 3. Router R1-SEDE — DHCP, SSH, AAA y VPN
 
-Este es un **laboratorio académico**, no un diseño listo para producción. El IOS antiguo y el FortiGate sin licencia limitaron los algoritmos IPsec a DES/SHA-1/DH2; además existen configuraciones heredadas (SNMPv2c, hashes tipo 5, VLAN 1). Los controles descritos son **inspirados en CIS**, no certificación de cumplimiento del benchmark. Se recomienda sustituir claves reales por valores redactados en cualquier `running-config` público y rotar secretos que ya se hayan publicado.
+### 3.1 Interfaces y DHCP
 
-**Fecha de documentación:** 11 de noviembre de 2026.
+```cisco
+interface FastEthernet0/1
+ description LAN_PRINCIPAL
+ ip address 10.21.40.1 255.255.255.128
+!
+interface FastEthernet0/0
+ description ENLACE_FORTIGATE
+ ip address 10.21.40.129 255.255.255.252
+ crypto map VPN-MAP
+!
+ip dhcp excluded-address 10.21.40.1 10.21.40.49
+ip dhcp pool LAN-USUARIOS
+ network 10.21.40.0 255.255.255.128
+ default-router 10.21.40.1
+ dns-server 8.8.8.8
+```
+
+**Pruebas:** `show ip dhcp binding` y `ipconfig /all`; Usuario-1 obtuvo `10.21.40.50`.
+
+### 3.2 SSH y AAA
+
+```cisco
+aaa new-model
+aaa authentication login default group radius local
+aaa authorization exec default group radius local
+aaa accounting exec default start-stop group radius
+ip ssh version 2
+line vty 0 4
+ exec-timeout 5 0
+ transport input ssh
+```
+
+NPS está en `10.21.40.10`, con autenticación UDP 1812 y contabilidad UDP 1813. Se verificó el acceso con `adminradius` y actividad de AAA.
+
+### 3.3 Rutas y selectores VPN
+
+```cisco
+ip route 10.21.40.136 255.255.255.248 10.21.40.130
+access-list 110 permit ip 10.21.40.0 0.0.0.127 10.21.40.136 0.0.0.7
+```
+
+La configuración de IKE/IPsec y el peer FortiGate constan en el archivo del equipo. **No se reproduce la clave precompartida**.
+
+[Ver running-config de R1](Show%20running-config/Show%20running-config%20R1-Sede.txt).
+
+## 4. Switch SW-SEDE — SSH y SNMP
+
+```cisco
+interface Vlan1
+ description ADMINISTRACION_SWITCH
+ ip address 10.21.40.2 255.255.255.128
+!
+ip default-gateway 10.21.40.1
+access-list 10 permit 10.21.40.20
+snmp-server community <COMUNIDAD_PRIVADA> RO 10
+ip ssh version 2
+line vty 0 4
+ exec-timeout 5 0
+ login local
+ transport input ssh
+```
+
+Los puertos `Gi0/1`, `Gi0/2` y `Gi0/3` conectan respectivamente Windows Server, Zabbix y Usuario-1; `Gi0/0` enlaza con R1. Se comprobó SSH y el cierre de Telnet, y Zabbix recibió datos por SNMP con la ACL 10.
+
+[Ver running-config del switch](Show%20running-config/Show%20running-config%20SW-Sede.txt).
+
+## 5. FortiGate 7.0.9 — VPN IPsec
+
+La configuración se realizó en la **interfaz gráfica de FortiGate**. El túnel `VPN-CISCO` une `10.21.40.0/25` y `10.21.40.136/29`, mediante IKEv1 y ESP. Por limitaciones del laboratorio se negociaron algoritmos heredados **DES/SHA-1 y DH2**, no apropiados para producción.
+
+**Comprobaciones observadas:**
+
+- **VPN activa:** monitor IPsec en `Up`, R1 con `QM_IDLE` y contadores ESP mayores que cero; ping entre Usuario-1 y Usuario-2 exitoso.
+- **VPN desactivada:** `Bring Down` en GUI y pérdida de comunicación durante la comprobación.
+- **VPN restablecida:** `Bring Up` y recuperación de respuestas ICMP.
+
+[Configuración FortiGate](Configuracion%20FortiGate/README.md) · [Pruebas detalladas de IPsec](Documentacion/VPN-IPsec.md).
+
+## 6. Ubuntu Server — instalación y monitoreo Zabbix
+
+El servidor `ZABBIX-SRV` ejecuta **Ubuntu Server 24.04.5, Zabbix 7.0 LTS, MariaDB y Apache**. En la GUI de Zabbix, el host `SW-SEDE` se supervisó por SNMPv2c sobre UDP 161.
+
+```bash
+sudo systemctl is-active mariadb zabbix-server zabbix-agent apache2
+snmpget -v2c -c '<COMUNIDAD_PRIVADA>' 10.21.40.2 1.3.6.1.2.1.1.5.0
+```
+
+**Resultado:** servicios `active`; SNMP disponible en verde; datos de `System name`, `System contact`, `System location` y `Uptime`.
+
+[Configuración Zabbix](Configuracion%20Zabbix/README.md) · [Comandos de instalación del servidor Ubuntu](Scripts/ZABBIX-SRV_Instalacion_Config.txt) · [SNMP detallado](Documentacion/Zabbix-SNMP.md).
+
+## 7. Windows Server — Active Directory, NPS y RADIUS
+
+El servidor `WIN-AD-NPS` (`10.21.40.10`) aloja el dominio `parcial.test` y el servicio NPS. Se habilitó el cliente RADIUS R1 y la política `ACCESO-SSH-CISCO`, con atributo administrativo compatible con el IOS utilizado.
+
+| Verificación | Resultado |
+|---|---|
+| Acceso SSH a R1 mediante usuario `adminradius` | Correcto |
+| NPS, evento **6272** | Solicitud autorizada |
+| NPS, evento **6273** | Solicitud denegada |
+| Comandos `show aaa servers` / `show aaa user all` | Solicitudes y sesiones registradas |
+
+[Configuración Windows Server](Configuracion%20Windows%20Server/README.md) · [AAA y auditoría](Documentacion/AAA-RADIUS-Windows-Server.md).
+
+## 8. Hardening — medidas inspiradas en CIS
+
+Se documentaron `no ip source-route`, desactivación de HTTP/HTTPS administrativos, SSHv2 y VTY sin Telnet, cierre de sesión remota a cinco minutos, autenticación local y restricción SNMP con ACL. También se identificaron limitaciones pendientes: hashes tipo 5, VLAN 1, SNMPv2c, algoritmos IPsec antiguos y advertencia de negociación de dúplex en interfaces virtuales.
+
+**No se declara cumplimiento total CIS.** [Ver medidas, comandos y limitaciones](Documentacion/Hardening-CIS.md).
+
+## 9. Evidencias y resultados
+
+Las pruebas del laboratorio se realizaron, pero **las capturas originales todavía deben incorporarse como archivos dentro del repositorio**. No se incluyen imágenes inexistentes ni se presentan reconstrucciones como capturas.
+
+| Prueba | Lugar de verificación | Resultado |
+|---|---|---|
+| Topología física | Lienzo de GNS3 | Dispositivos y enlaces visibles |
+| DHCP | Usuario-1 y R1 | `10.21.40.50` asignada |
+| SSH / Telnet | R1 y SW | SSH funcional y Telnet no habilitado |
+| VPN activa | FortiGate y R1 | `Up`, `QM_IDLE`, ping exitoso |
+| VPN desconectada | FortiGate y Windows | `Inactive`, ping sin respuesta |
+| VPN restaurada | FortiGate y Windows | Comunicación recuperada |
+| Zabbix | GUI y terminal Ubuntu | Estado SNMP verde y métricas |
+| AAA/RADIUS | NPS y R1 | Eventos 6272/6273 y actividad AAA |
+| CIS | Running-config y comandos IOS | Controles implementados documentados |
+
+📷 [Abrir el inventario y las instrucciones para integrar las capturas](Evidencias/README.md).
+
+## 10. Conclusiones
+
+Se consiguió conectar dos redes de laboratorio mediante IPsec y demostrar la dependencia del túnel para el tráfico entre usuarios; además se verificaron direccionamiento, DHCP, SSH, disponibilidad SNMP en Zabbix y autenticación AAA/RADIUS con eventos aceptados y rechazados. Las limitaciones de versiones y algoritmos se consignan explícitamente, sin atribuir al entorno una seguridad de producción.
+
+## 11. Archivos del proyecto
+
+| Carpeta | Contenido |
+|---|---|
+| [Topologia](Topologia/README.md) | Topología, conexiones y ubicación de capturas |
+| [Direccionamiento](Direccionamiento/README.md) | Plan completo de IP y pruebas |
+| [Show running-config](Show%20running-config) | Configuraciones Cisco R1 y SW |
+| [Scripts](Scripts/ZABBIX-SRV_Instalacion_Config.txt) | Instalación Ubuntu/Zabbix |
+| [Configuracion Zabbix](Configuracion%20Zabbix/README.md) | Resumen del servidor y monitoreo |
+| [Configuracion Windows Server](Configuracion%20Windows%20Server/README.md) | AD DS, DNS, NPS |
+| [Configuracion FortiGate](Configuracion%20FortiGate/README.md) | VPN GUI e IPsec |
+| [Documentacion](Documentacion/Entrega-y-video.md) | VPN, AAA, SNMP, CIS y requisitos de entrega |
+| [Evidencias](Evidencias/README.md) | Capturas auténticas pendientes de integrar |
+
+**Entrega:** [guion del video y comprobaciones finales](Documentacion/Entrega-y-video.md).
+
+> **Seguridad de la publicación:** los archivos Cisco actuales del repositorio aún contienen secretos que deben redactarse y rotarse. Las claves, comunidades SNMP y secretos RADIUS no deben mantenerse visibles en repositorios públicos.
+
+**Última actualización documental:** 11 de noviembre de 2026.
